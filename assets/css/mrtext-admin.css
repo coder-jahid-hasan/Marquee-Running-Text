@@ -42,3 +42,12 @@
   .bio-data {
 	text-align: center;
   }
+  .bmc-btn img {
+    text-align: center;
+    width: 70%;
+	transition: transform .2s;
+}
+.bmc-btn img:hover {
+    transform: scale(1.1);
+}
+

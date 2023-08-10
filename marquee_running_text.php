@@ -1,22 +1,28 @@
 <?php
 /*
 Plugin Name: Marquee Running Text
-Plugin URI: https://mrt.zayaas.com/
+Plugin URI: https://bongodevs.com/
 Description: Used by millions, Akismet is quite possibly the best way in the world to <strong>protect your blog from spam</strong>. It keeps your site protected even while you sleep. To get started: activate the Akismet plugin and then go to your Akismet Settings page to set up your API key.
-Version: 1.0
+Version: 1.0.0
 Requires at least: 5.0
-Requires PHP: 5.2
+Requires PHP: 5.6
 Author: Jahid Hasan
-Author URI: https://author.zayaas.com/
+Author URI: https://author.bongodevs.com/
 License: GPLv2 or later
 Text Domain: mrtext
 */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
 function mrtext_enqueue_scripts()
 {
     wp_enqueue_style(
         "mrtext-main",
         plugin_dir_url(__FILE__) . "assets/css/mrtext-main.css"
+    );
+    wp_enqueue_script(
+        "buyme-coffee",
+        "/cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
     );
 }
 add_action("wp_enqueue_scripts", "mrtext_enqueue_scripts");
@@ -29,6 +35,10 @@ function mrtext_admin_enqueue_scripts()
     );
 }
 add_action("admin_enqueue_scripts", "mrtext_admin_enqueue_scripts");
+
+/*
+ * Plugin shortcode create
+ */
 
 function mrtext_shortcode_function()
 {
@@ -55,50 +65,50 @@ function mrtext_shortcode_function()
     echo '<style> 
 .runtext-container {
     background:' .
-        $mrtext_bg_color_option .
+    esc_html($mrtext_bg_color_option) .
         ';
     border: 1px solid ' .
-        $mrtext_bg_color_option .
+        esc_html($mrtext_bg_color_option) .
         ';
     }
 .runtext-container .holder a{ 
     color: ' .
-        $mrtext_color_option .
+        esc_html($mrtext_color_option) .
         ';
     font-size: ' .
-        $mrtext_font_size .
+        esc_html($mrtext_font_size) .
         ';
     font-weight: ' .
-        $mrtext_font_weight .
+        esc_html($mrtext_font_weight) .
         ';
 }
 .text-container a:before {
     background-color: ' .
-        $mrtext_color_option .
+        esc_html($mrtext_color_option) .
         ';
 }
 .runtext-container .holder a:hover{
 	color:' .
-        $mrtext_hover_color_option .
+        esc_html($mrtext_hover_color_option) .
         ';
 }
 .text-container a:hover::before {
     background-color: ' .
-        $mrtext_hover_color_option .
+        esc_html($mrtext_hover_color_option) .
         ';
 }
 </style>';
     ?>
 <div class="runtext-container">
     <div class="main-runtext">
-        <marquee direction="<?php echo $mrtext_font_direction; ?>" scrolldelay="<?php echo $mrtext_font_scroll_delay; ?>" onmouseover="this.stop();"
+        <marquee direction="<?php echo esc_attr($mrtext_font_direction); ?>" scrolldelay="<?php echo esc_attr($mrtext_font_scroll_delay); ?>" onmouseover="this.stop();"
             onmouseout="this.start();">
 
             <div class="holder">
                 <?php
                 if (!empty($mrtext_text_field_1)) {
                     echo '<div class="text-container"><a class="fancybox" href="' .
-                        esc_html($mrtext_text_field_1_link) .
+                        esc_url($mrtext_text_field_1_link) .
                         '" >' .
                         esc_html($mrtext_text_field_1) .
                         '</a>
@@ -106,7 +116,7 @@ function mrtext_shortcode_function()
                 }
                 if (!empty($mrtext_text_field_2)) {
                     echo '<div class="text-container"><a class="fancybox" href="' .
-                        esc_html($mrtext_text_field_2_link) .
+                        esc_url($mrtext_text_field_2_link) .
                         '" >' .
                         esc_html($mrtext_text_field_2) .
                         '</a>
@@ -114,7 +124,7 @@ function mrtext_shortcode_function()
                 }
                 if (!empty($mrtext_text_field_3)) {
                     echo '<div class="text-container"><a class="fancybox" href="' .
-                        esc_html($mrtext_text_field_3_link) .
+                        esc_url($mrtext_text_field_3_link) .
                         '" >' .
                         esc_html($mrtext_text_field_3) .
                         '</a>
@@ -122,7 +132,7 @@ function mrtext_shortcode_function()
                 }
                 if (!empty($mrtext_text_field_4)) {
                     echo '<div class="text-container"><a class="fancybox" href="' .
-                        esc_html($mrtext_text_field_4_link) .
+                        esc_url($mrtext_text_field_4_link) .
                         '" >' .
                         esc_html($mrtext_text_field_4) .
                         '</a>
@@ -130,7 +140,7 @@ function mrtext_shortcode_function()
                 }
                 if (!empty($mrtext_text_field_5)) {
                     echo '<div class="text-container"><a class="fancybox" href="' .
-                        esc_html($mrtext_text_field_5_link) .
+                        esc_url($mrtext_text_field_5_link) .
                         '" >' .
                         esc_html($mrtext_text_field_5) .
                         '</a>
@@ -145,20 +155,26 @@ function mrtext_shortcode_function()
 
 <?php return ob_get_clean();
 }
+
+
 function mrtext_register_shortcode()
 {
     add_shortcode("mrtext", "mrtext_shortcode_function");
 }
 add_action("init", "mrtext_register_shortcode");
 
-function add_shortcode_header()
+/*
+ * add shortcode to header
+ */
+
+function mrtext_add_shortcode_header()
 {
     $current_value = get_option("mrtext_radio", "show");
     if ($current_value == "show") {
         echo do_shortcode("[mrtext]");
     }
 }
-add_action("wp_head", "add_shortcode_header", 20);
+add_action("wp_head", "mrtext_add_shortcode_header", 20);
 
 /*
  * Plugin Option Page Function
@@ -194,14 +210,14 @@ function mrtext_settings_page()
 {
     ?>
 <div class="wrap">
-    <h1><?php print esc_attr("Add Marquee"); ?></h1>
+    <h1><?php print esc_html("Add Marquee"); ?></h1>
 </div>
 <!-- Tab -->
 <h2 class="nav-tab-wrapper">
-    <a href="?page=mrtext-settings" class="nav-tab nav-tab-active"><?php print esc_attr(
+    <a href="?page=mrtext-settings" class="nav-tab nav-tab-active"><?php print esc_html(
         "Add Marquee"
     ); ?></a>
-    <a href="?page=mrtext_style" class="nav-tab"><?php print esc_attr(
+    <a href="?page=mrtext_style" class="nav-tab"><?php print esc_html(
         "Marquee Style"
     ); ?></a>
 </h2>
@@ -210,11 +226,11 @@ function mrtext_settings_page()
     <div class="left-column">
         <form method="post" action="options.php">
             <?php wp_nonce_field("update-options"); ?>
-            <h2><?php print esc_attr("Marquee 1"); ?></h2>
+            <h2><?php print esc_html("Marquee 1"); ?></h2>
             <table class="form-table">
                 <!--- Text Area Field 1 --->
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_1"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_1"><?php print esc_html(
                 "Text Area "
             ); ?></label></th>
                     <td><textarea id="mrtext_text_field_1" name="mrtext_text_field_1" rows="5" cols="50"><?php print esc_textarea(
@@ -222,7 +238,7 @@ function mrtext_settings_page()
                     ); ?></textarea></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_1_link" name="mrtext_text_field_1_link"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_1_link" name="mrtext_text_field_1_link"><?php print esc_html(
                         "Link"
                     ); ?></label></th>
                     <td><input type="text" id="mrtext_text_field_1_link" name="mrtext_text_field_1_link" value="<?php print esc_attr(
@@ -232,11 +248,11 @@ function mrtext_settings_page()
                 </tr>
             </table>
             <hr>
-            <h2><?php print esc_attr("Marquee 2"); ?></h2>
+            <h2><?php print esc_html("Marquee 2"); ?></h2>
             <table class="form-table">
                 <!--- Text Area Field 2 --->
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_2"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_2"><?php print esc_html(
                 "Text Area "
             ); ?></label></th>
                     <td><textarea id="mrtext_text_field_2" name="mrtext_text_field_2" rows="5" cols="50"><?php print esc_textarea(
@@ -244,7 +260,7 @@ function mrtext_settings_page()
                     ); ?></textarea></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_2_link" name="mrtext_text_field_2_link"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_2_link" name="mrtext_text_field_2_link"><?php print esc_html(
                         "Link"
                     ); ?></label></th>
                     <td><input type="text" id="mrtext_text_field_2_link" name="mrtext_text_field_2_link" value="<?php print esc_attr(
@@ -254,11 +270,11 @@ function mrtext_settings_page()
                 </tr>
             </table>
             <hr>
-            <h2><?php print esc_attr("Marquee 3"); ?></h2>
+            <h2><?php print esc_html("Marquee 3"); ?></h2>
             <table class="form-table">
                 <!--- Text Area Field 3 --->
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_3"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_3"><?php print esc_html(
                 "Text Area "
             ); ?></label></th>
                     <td><textarea id="mrtext_text_field_3" name="mrtext_text_field_3" rows="5" cols="50"><?php print esc_textarea(
@@ -266,7 +282,7 @@ function mrtext_settings_page()
                     ); ?></textarea></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_3_link" name="mrtext_text_field_3_link"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_3_link" name="mrtext_text_field_3_link"><?php print esc_html(
                         "Link"
                     ); ?></label></th>
                     <td><input type="text" id="mrtext_text_field_3_link" name="mrtext_text_field_3_link" value="<?php print esc_attr(
@@ -276,11 +292,11 @@ function mrtext_settings_page()
                 </tr>
             </table>
             <hr>
-            <h2><?php print esc_attr("Marquee 4"); ?></h2>
+            <h2><?php print esc_html("Marquee 4"); ?></h2>
             <table class="form-table">
                 <!--- Text Area Field 4 --->
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_4"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_4"><?php print esc_html(
                 "Text Area "
             ); ?></label></th>
                     <td><textarea id="mrtext_text_field_4" name="mrtext_text_field_4" rows="5" cols="50"><?php print esc_textarea(
@@ -288,7 +304,7 @@ function mrtext_settings_page()
                     ); ?></textarea></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_4_link" name="mrtext_text_field_4_link"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_4_link" name="mrtext_text_field_4_link"><?php print esc_html(
                         "Link"
                     ); ?></label></th>
                     <td><input type="text" id="mrtext_text_field_4_link" name="mrtext_text_field_4_link" value="<?php print esc_attr(
@@ -298,11 +314,11 @@ function mrtext_settings_page()
                 </tr>
             </table>
             <hr>
-            <h2><?php print esc_attr("Marquee 5"); ?></h2>
+            <h2><?php print esc_html("Marquee 5"); ?></h2>
             <table class="form-table">
                 <!--- Text Area Field 5 --->
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_5"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_5"><?php print esc_html(
                 "Text Area "
             ); ?></label></th>
                     <td><textarea id="mrtext_text_field_5" name="mrtext_text_field_5" rows="5" cols="50"><?php print esc_textarea(
@@ -310,7 +326,7 @@ function mrtext_settings_page()
                     ); ?></textarea></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="mrtext_text_field_5_link" name="mrtext_text_field_5_link"><?php print esc_attr(
+                    <th scope="row"><label for="mrtext_text_field_5_link" name="mrtext_text_field_5_link"><?php print esc_html(
                         "Link"
                     ); ?></label></th>
                     <td><input type="text" id="mrtext_text_field_5_link" name="mrtext_text_field_5_link" value="<?php print esc_attr(
@@ -328,7 +344,7 @@ function mrtext_settings_page()
     </div>
     <div class="right-column">
         <div class="bio-data">
-            <h1><?php print esc_attr("About Author"); ?></h1>
+            <h1><?php print esc_html("About Author"); ?></h1>
         </div>
         <div class="round-image-container">
             <div class="round-image">
@@ -337,18 +353,16 @@ function mrtext_settings_page()
             </div>
         </div>
         <div class="bio-data">
-            <h2><?php print esc_attr("Jahid Hasan"); ?></h2>
-            <p><?php print esc_attr(
+            <h2><?php print esc_html("Jahid Hasan"); ?></h2>
+            <p><?php print esc_html(
                 "As a WordPress developer, you have the ability to create custom themes, plugins, and customize websites to meet specific requirements. Your expertise enables you to shape engaging designs and implement powerful functionality, enhancing the WordPress experience for users. Keep evolving your skills, staying up-to-date with trends, and embracing the WordPress community to make a significant impact in the field of development."
             ); ?></p>
-            <h2><?php print esc_attr("Buy Me a Coffee"); ?></h2>
-            <div class="bmc-button">
-                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-                    data-name="bmc-button" data-slug="hasanjahid" data-color="#40DCA5" data-emoji="" data-font="Bree"
-                    data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff"
-                    data-coffee-color="#FFDD00"></script>
-            </div>
-            <h2><?php print esc_attr("QR"); ?></h2>
+            <h2><?php print esc_html("Buy Me a Coffee"); ?></h2>
+                <a class="bmc-btn" target="_blank" href="https://buymeacoffee.com/hasanjahid">
+                    <img src="<?php print plugin_dir_url(__FILE__) .
+                    "assets/img/buyme-coffee.png"; ?>" alt="Buy Me a Coffee">
+                </a>
+            <h2><?php print esc_html("QR"); ?></h2>
             <div class="round-image-container">
                 <div class="round-image">
                     <img src="<?php print plugin_dir_url(__FILE__) .
@@ -365,14 +379,14 @@ function mrtext_style_page()
 {
     ?>
 <div class="wrap">
-    <h1><?php print esc_attr("Marquee Style"); ?></h1>
+    <h1><?php print esc_html("Marquee Style"); ?></h1>
 </div>
 <!-- Tab -->
 <h2 class="nav-tab-wrapper">
-    <a href="?page=mrtext-settings" class="nav-tab"><?php print esc_attr(
+    <a href="?page=mrtext-settings" class="nav-tab"><?php print esc_html(
         "Add Marquee"
     ); ?></a>
-    <a href="?page=mrtext_style" class="nav-tab nav-tab-active"><?php print esc_attr(
+    <a href="?page=mrtext_style" class="nav-tab nav-tab-active"><?php print esc_html(
         "Marquee Style"
     ); ?></a>
 </h2>
@@ -382,11 +396,11 @@ function mrtext_style_page()
         <form method="post" action="options.php">
             <?php wp_nonce_field("update-options"); ?>
             <div>
-                <h2><?php print esc_attr("Color Options"); ?></h2>
+                <h2><?php print esc_html("Color Options"); ?></h2>
                 <table class="form-table">
                     <!--- Background Color Option --->
                     <tr>
-                        <th scope="row"><label for="mrtext_bg_color_option" name="mrtext_bg_color_option"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_bg_color_option" name="mrtext_bg_color_option"><?php print esc_html(
                             "Background Color"
                         ); ?></label></th>
                         <td><input type="color" id="mrtext_bg_color_option" name="mrtext_bg_color_option" value="<?php print esc_attr(
@@ -395,7 +409,7 @@ function mrtext_style_page()
                     </tr>
                     <!--- Text Color Option --->
                     <tr>
-                        <th scope="row"><label for="mrtext_color_option" name="mrtext_color_option"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_color_option" name="mrtext_color_option"><?php print esc_html(
                             "Text Color"
                         ); ?></label></th>
                         <td><input type="color" id="mrtext_color_option" name="mrtext_color_option" value="<?php print esc_attr(
@@ -404,7 +418,7 @@ function mrtext_style_page()
                     </tr>
                     <!--- Text Hover Color Option --->
                     <tr>
-                        <th scope="row"><label for="mrtext_hover_color_option" name="mrtext_hover_color_option"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_hover_color_option" name="mrtext_hover_color_option"><?php print esc_html(
                             "Text Hover Color"
                         ); ?></label></th>
                         <td><input type="color" id="mrtext_hover_color_option" name="mrtext_hover_color_option" value="<?php print esc_attr(
@@ -415,11 +429,11 @@ function mrtext_style_page()
             </div>
             <hr>
             <div>
-                <h2><?php print esc_attr("Typography & Others"); ?></h2>
+                <h2><?php print esc_html("Typography & Others"); ?></h2>
                 <table class="form-table">                    
                     <!--- Font Size --->
                     <tr>
-                        <th scope="row"><label for="mrtext_font_size" name="mrtext_font_size"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_font_size" name="mrtext_font_size"><?php print esc_html(
                             "Font Size"
                         ); ?></label></th>
                         <td><input type="text" id="mrtext_font_size" name="mrtext_font_size" value="<?php print esc_attr(
@@ -429,7 +443,7 @@ function mrtext_style_page()
                     </tr>
                     <!--- Font Weight --->
                     <tr>
-                        <th scope="row"><label for="mrtext_font_weight" name="mrtext_font_weight"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_font_weight" name="mrtext_font_weight"><?php print esc_html(
                             "Font Weight"
                         ); ?></label></th>
                         <td><input type="text" id="mrtext_font_weight" name="mrtext_font_weight" value="<?php print esc_attr(
@@ -439,7 +453,7 @@ function mrtext_style_page()
                     </tr>
                     <!--- Font Direction --->
                     <tr>
-                        <th scope="row"><label for="mrtext_font_direction" name="mrtext_font_direction"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_font_direction" name="mrtext_font_direction"><?php print esc_html(
                             "Font Direction"
                         ); ?></label></th>
                         <td><input type="text" placeholder="right or left" id="mrtext_font_direction" name="mrtext_font_direction" value="<?php print esc_attr(
@@ -448,7 +462,7 @@ function mrtext_style_page()
                     </tr>
                     <!--- Scroll Delay --->
                     <tr>
-                        <th scope="row"><label for="mrtext_scroll_delay" name="mrtext_font_scroll_delay"><?php print esc_attr(
+                        <th scope="row"><label for="mrtext_scroll_delay" name="mrtext_font_scroll_delay"><?php print esc_html(
                             "Scroll Delay"
                         ); ?></label></th>
                         <td><input type="text" id="mrtext_font_scroll_delay" name="mrtext_font_scroll_delay" value="<?php print esc_attr(
@@ -462,7 +476,7 @@ function mrtext_style_page()
             <?php $current_value = get_option("mrtext_radio", "show"); ?>
             <hr>
             <div>
-                <h2><?php print esc_attr("Top Header Marquee"); ?></h2>
+                <h2><?php print esc_html("Top Header Marquee"); ?></h2>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="mrtext_radio_show">Show</label></th>
@@ -487,7 +501,7 @@ function mrtext_style_page()
     </div>
     <div class="right-column">
         <div class="bio-data">
-            <h1><?php print esc_attr("About Author"); ?></h1>
+            <h1><?php print esc_html("About Author"); ?></h1>
         </div>
         <div class="round-image-container">
             <div class="round-image">
@@ -496,18 +510,16 @@ function mrtext_style_page()
             </div>
         </div>
         <div class="bio-data">
-            <h2><?php print esc_attr("Jahid Hasan"); ?></h2>
-            <p><?php print esc_attr(
+            <h2><?php print esc_html("Jahid Hasan"); ?></h2>
+            <p><?php print esc_html(
                 "As a WordPress developer, you have the ability to create custom themes, plugins, and customize websites to meet specific requirements. Your expertise enables you to shape engaging designs and implement powerful functionality, enhancing the WordPress experience for users. Keep evolving your skills, staying up-to-date with trends, and embracing the WordPress community to make a significant impact in the field of development."
             ); ?></p>
-            <h2><?php print esc_attr("Buy Me a Coffee"); ?></h2>
-            <div class="bmc-button">
-                <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-                    data-name="bmc-button" data-slug="hasanjahid" data-color="#40DCA5" data-emoji="" data-font="Bree"
-                    data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#ffffff"
-                    data-coffee-color="#FFDD00"></script>
-            </div>
-            <h2><?php print esc_attr("QR"); ?></h2>
+            <h2><?php print esc_html("Buy Me a Coffee"); ?></h2>
+            <a class="bmc-btn" target="_blank" href="https://buymeacoffee.com/hasanjahid">
+                    <img src="<?php print plugin_dir_url(__FILE__) .
+                    "assets/img/buyme-coffee.png"; ?>" alt="Buy Me a Coffee">
+                </a>
+            <h2><?php print esc_html("QR"); ?></h2>
             <div class="round-image-container">
                 <div class="round-image">
                     <img src="<?php print plugin_dir_url(__FILE__) .

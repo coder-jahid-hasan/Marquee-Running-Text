@@ -2,10 +2,10 @@
 Contributors: jahid49
 Donate link: https://www.buymeacoffee.com/hasanjahid
 Tags: Marquee, Running Text, plugin, Text Slider, slider, admin, page builder,shortcode,jahid49
-Requires at least: 3.5
+Requires at least: 5.0
 Tested up to: 6.1
 Requires PHP: 5.6
-Stable tag: 1.6.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 
 Need to Show Running text at the top header? Makes it easy with Marquee Running Text plugin.
