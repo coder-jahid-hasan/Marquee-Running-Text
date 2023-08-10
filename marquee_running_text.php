@@ -2,7 +2,7 @@
 /*
 Plugin Name: Marquee Running Text
 Plugin URI: https://bongodevs.com/
-Description: Used by millions, Akismet is quite possibly the best way in the world to <strong>protect your blog from spam</strong>. It keeps your site protected even while you sleep. To get started: activate the Akismet plugin and then go to your Akismet Settings page to set up your API key.
+Description: Marquee Running Text plugin allows to make <strong> Marquee text at the top header</strong>, with fully customizable options. Most of all, it had to be responsive.
 Version: 1.0.0
 Requires at least: 5.0
 Requires PHP: 5.6
