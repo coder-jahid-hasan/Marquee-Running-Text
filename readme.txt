@@ -14,8 +14,6 @@ Need to Show Running text at the top header? Makes it easy with Marquee Running 
 
 Marquee Running Text is the WordPress plugin that developed by Jahid Hasan. Marquee Running Text plugin allows to make Marquee text at the top header, with fully customizable options. Most of all, it had to be responsive.
 
-[Live Demo](https://marquee.zayaas.com/ "Marquee Running Text")
-
 **FEATURES INCLUDE**
 
 *   No setup needed.
