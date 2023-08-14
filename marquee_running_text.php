@@ -20,10 +20,6 @@ function mrtext_enqueue_scripts()
         "mrtext-main",
         plugin_dir_url(__FILE__) . "assets/css/mrtext-main.css"
     );
-    wp_enqueue_script(
-        "buyme-coffee",
-        "/cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js"
-    );
 }
 add_action("wp_enqueue_scripts", "mrtext_enqueue_scripts");
 
