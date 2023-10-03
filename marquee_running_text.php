@@ -61,36 +61,36 @@ function mrtext_shortcode_function()
     echo '<style> 
 .runtext-container {
     background:' .
-    esc_html($mrtext_bg_color_option) .
+    esc_attr($mrtext_bg_color_option) .
         ';
     border: 1px solid ' .
-        esc_html($mrtext_bg_color_option) .
+    esc_attr($mrtext_bg_color_option) .
         ';
     }
 .runtext-container .holder a{ 
     color: ' .
-        esc_html($mrtext_color_option) .
+    esc_attr($mrtext_color_option) .
         ';
     font-size: ' .
-        esc_html($mrtext_font_size) .
+    esc_attr($mrtext_font_size) .
         ';
     font-weight: ' .
-        esc_html($mrtext_font_weight) .
+    esc_attr($mrtext_font_weight) .
         ';
 }
 .text-container a:before {
     background-color: ' .
-        esc_html($mrtext_color_option) .
+    esc_attr($mrtext_color_option) .
         ';
 }
 .runtext-container .holder a:hover{
 	color:' .
-        esc_html($mrtext_hover_color_option) .
+    esc_attr($mrtext_hover_color_option) .
         ';
 }
 .text-container a:hover::before {
     background-color: ' .
-        esc_html($mrtext_hover_color_option) .
+    esc_attr($mrtext_hover_color_option) .
         ';
 }
 </style>';
@@ -163,14 +163,15 @@ add_action("init", "mrtext_register_shortcode");
  * add shortcode to header
  */
 
-function mrtext_add_shortcode_header()
-{
-    $current_value = get_option("mrtext_radio", "show");
-    if ($current_value == "show") {
-        echo do_shortcode("[mrtext]");
-    }
-}
-add_action("wp_head", "mrtext_add_shortcode_header", 20);
+ function mrtext_add_shortcode_header()
+ {
+     $current_value = get_option("mrtext_radio", "show");
+     if ($current_value == "show") {
+         require_once('modules/marquee.php');
+     }
+ }
+ add_action("wp_head", "mrtext_add_shortcode_header", 20);
+ 
 
 /*
  * Plugin Option Page Function
@@ -335,7 +336,7 @@ function mrtext_settings_page()
             <input type="hidden" name="page_options"
                 value="mrtext_text_field_1,mrtext_text_field_2,mrtext_text_field_3,mrtext_text_field_4,mrtext_text_field_5,mrtext_text_field_1_link,mrtext_text_field_2_link,mrtext_text_field_3_link,mrtext_text_field_4_link,mrtext_text_field_5_link">
             <p class="submit"><input type="submit" name="submit" class="button-primary"
-                    value="<?php _e("Save Changes", "mrtext"); ?> "></p>
+                    value="<?php esc_html_e("Save Changes", "mrtext"); ?> "></p>
         </form>
     </div>
     <div class="right-column">
@@ -344,8 +345,8 @@ function mrtext_settings_page()
         </div>
         <div class="round-image-container">
             <div class="round-image">
-                <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/jahid_hasan.jpg"; ?>" alt="Jahid Hasan">
+                <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/jahid_hasan.jpg"); ?>" alt="Jahid Hasan">
             </div>
         </div>
         <div class="bio-data">
@@ -355,14 +356,14 @@ function mrtext_settings_page()
             ); ?></p>
             <h2><?php print esc_html("Buy Me a Coffee"); ?></h2>
                 <a class="bmc-btn" target="_blank" href="https://buymeacoffee.com/hasanjahid">
-                    <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/buyme-coffee.png"; ?>" alt="Buy Me a Coffee">
+                    <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/buyme-coffee.png"); ?>" alt="Buy Me a Coffee">
                 </a>
             <h2><?php print esc_html("QR"); ?></h2>
             <div class="round-image-container">
                 <div class="round-image">
-                    <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/bmc_qr.png"; ?>" alt="Jahid Hasan">
+                    <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/bmc_qr.png"); ?>" alt="Jahid Hasan">
                 </div>
             </div>
         </div>
@@ -492,7 +493,7 @@ function mrtext_style_page()
             <input type="hidden" name="page_options"
                 value="mrtext_bg_color_option,mrtext_color_option,mrtext_hover_color_option,mrtext_font_direction,mrtext_font_size,mrtext_font_weight,mrtext_font_scroll_delay,mrtext_radio">
             <p class="submit"><input type="submit" name="submit" class="button-primary"
-                    value="<?php _e("Save Changes", "mrtext"); ?> "></p>
+                    value="<?php esc_html_e("Save Changes", "mrtext"); ?> "></p>
         </form>
     </div>
     <div class="right-column">
@@ -501,8 +502,8 @@ function mrtext_style_page()
         </div>
         <div class="round-image-container">
             <div class="round-image">
-                <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/jahid_hasan.jpg"; ?>" alt="Jahid Hasan">
+                <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/jahid_hasan.jpg"); ?>" alt="Jahid Hasan">
             </div>
         </div>
         <div class="bio-data">
@@ -512,14 +513,14 @@ function mrtext_style_page()
             ); ?></p>
             <h2><?php print esc_html("Buy Me a Coffee"); ?></h2>
             <a class="bmc-btn" target="_blank" href="https://buymeacoffee.com/hasanjahid">
-                    <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/buyme-coffee.png"; ?>" alt="Buy Me a Coffee">
+                    <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/buyme-coffee.png"); ?>" alt="Buy Me a Coffee">
                 </a>
             <h2><?php print esc_html("QR"); ?></h2>
             <div class="round-image-container">
                 <div class="round-image">
-                    <img src="<?php print plugin_dir_url(__FILE__) .
-                    "assets/img/bmc_qr.png"; ?>" alt="Jahid Hasan">
+                    <img src="<?php print esc_url(plugin_dir_url(__FILE__) .
+                    "assets/img/bmc_qr.png"); ?>" alt="Jahid Hasan">
                 </div>
             </div>
         </div>
