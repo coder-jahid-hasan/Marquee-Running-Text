@@ -1,5 +1,4 @@
 === Marquee Running Text ===
-<<<<<<< HEAD
 Contributors: jahid49, bongdevs
 Donate link: https://www.buymeacoffee.com/hasanjahid
 Tags: marquee, running text, text slider, slider, admin
